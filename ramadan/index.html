@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>الملف الرمضاني التفاعلي | فضيلة الشيخ أ.د. سعد بن تركي الخثلان</title>
+<meta name="description" content="فتاوى ودروس ومقاطع رمضان من علم فضيلة الشيخ أ.د. سعد بن تركي الخثلان: بحث فوري، الجواب كاملًا بلفظ الشيخ، استماع، مواقيت الصلاة بتقويم أم القرى، ويعمل دون إنترنت.">
+<meta name="theme-color" content="#1ebcae">
+<link rel="canonical" href="https://salehelgendy.github.io/ramadan/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="الملف الرمضاني التفاعلي">
+<meta property="og:description" content="ما يهم المسلم والمسلمة في شهر رمضان من علم فضيلة الشيخ أ.د. سعد بن تركي الخثلان">
+<meta property="og:image" content="https://salehelgendy.github.io/ramadan/img/icon-512.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="img/icon-192.png">
+<link rel="apple-touch-icon" href="img/icon-180.png">
+<link rel="preload" href="fonts/readex.ttf" as="font" type="font/ttf" crossorigin>
+<link rel="preload" href="fonts/expo-bold.otf" as="font" type="font/otf" crossorigin>
+<link rel="stylesheet" href="style.css">
+<!-- Visit counter for "most read": paste the GoatCounter line here once the account exists, e.g.
+<script data-goatcounter="https://NAME.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script> -->
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <a class="brand-r" href="https://saadalkhathlan.com/" target="_blank" rel="noopener" id="sheikhLogo">
+      <img src="img/sheikh-white.png" alt="فضيلة الشيخ أ.د. سعد بن تركي الخثلان" width="97" height="64">
+    </a>
+    <div class="mid">
+      <div class="hij" id="hij"></div>
+      <div class="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <label for="q" class="sr">بحث</label>
+        <input id="q" type="search" autocomplete="off" placeholder="ابحث في الملف… مثال: بخاخ الربو، نية الصيام">
+        <button class="mic" id="mic" aria-label="ابحث بصوتك" hidden><svg class="i" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button>
+        <div class="sugg" id="sugg" role="listbox"></div>
+      </div>
+    </div>
+    <a class="brand-l" href="https://saadalkhathlan.com/" target="_blank" rel="noopener"><img src="img/logo-white.png" alt="منارات الهدى" width="57" height="62"></a>
+  </div>
+</header>
+
+<section class="hero">
+  <div>
+    <div class="crumb"><a href="https://saadalkhathlan.com/" target="_blank" rel="noopener">الرئيسية</a> / <span data-i="crumb">الملف الرمضاني</span></div>
+    <h1 data-i="title">الملف الرمضاني <span>التفاعلي</span></h1>
+    <p data-i="sub">ما يهم المسلم والمسلمة في شهر رمضان من علم فضيلة الشيخ أ.د. سعد بن تركي الخثلان</p>
+  </div>
+  <div class="tools">
+    <button class="tb" id="favBtn" aria-pressed="false"><svg class="i" viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg><span data-i="favs">المحفوظات</span> <b id="favN">0</b></button>
+    <button class="tb" id="fsDown" aria-label="تصغير الخط">A−</button>
+    <button class="tb" id="fsUp" aria-label="تكبير الخط">A+</button>
+    <button class="tb" id="theme" aria-label="الوضع الليلي"><svg class="i" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+    <button class="tb install" id="install"><svg class="i" viewBox="0 0 24 24"><path d="M12 3v12m0 0-4-4m4 4 4-4M5 21h14"/></svg><span data-i="inst">ثبّته على جوالك</span></button>
+    <div class="seg" role="group" aria-label="اللغة"><button aria-pressed="true" data-l="ar">ع</button><button aria-pressed="false" data-l="en">EN</button><button aria-pressed="false" data-l="ur">اردو</button></div>
+  </div>
+</section>
+<div class="persona" role="group">
+  <span data-i="pers">أحكام تخصّك:</span>
+  <button aria-pressed="false" data-p="woman" data-i="pw">المرأة</button>
+  <button aria-pressed="false" data-p="sick" data-i="ps">المريض</button>
+  <button aria-pressed="false" data-p="travel" data-i="pt">المسافر</button>
+  <button aria-pressed="false" data-p="imam" data-i="pi">الإمام والمصلي</button>
+  <button aria-pressed="false" data-p="medical" data-i="pm">العلاجات الحديثة</button>
+</div>
+
+<section class="dash">
+  <div class="block today" id="today"></div>
+  <div class="block" id="times"></div>
+</section>
+<section class="strip">
+  <div class="block"><div class="bt"><svg class="i" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg><span data-i="pop">الأكثر قراءة</span></div><ol class="mini-list" id="popular"></ol></div>
+  <div class="block"><div class="bt"><svg class="i" viewBox="0 0 24 24"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 16.8 5.8 21.3l2.4-7.4L2 9.4h7.6z"/></svg><span data-i="new">الجديد هذا الأسبوع</span></div><ul class="mini-list" id="news"></ul></div>
+  <div class="block"><div class="bt"><svg class="i" viewBox="0 0 24 24"><path d="M22 11.1V12a10 10 0 1 1-5.9-9.1"/><path d="M22 4 12 14l-3-3"/></svg><span data-i="wird">وِردك من الملف</span></div><div id="progress"></div></div>
+</section>
+
+<div class="wrap">
+  <main class="main" id="top">
+    <div class="bar">
+      <button class="btn rail-toggle" id="railBtn"><svg class="i" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg><span data-i="chapters">أبواب الملف</span></button>
+      <div class="types" id="types" role="group"></div>
+      <span class="count" id="count" aria-live="polite"></span>
+    </div>
+    <div class="list" id="list"></div>
+  </main>
+  <nav class="rail block" id="rail" aria-label="أبواب الملف"></nav>
+</div>
+
+<footer><div class="fi">
+  <img src="img/logo-white.png" alt="منارات الهدى" width="51" height="56">
+  <a href="qr.html" data-i="qrl">رموز QR للطباعة</a>
+  <a href="https://saadalkhathlan.com/ask-question" target="_blank" rel="noopener" data-i="askl">أرسل سؤالك</a>
+  <span>جميع الحقوق محفوظة لمؤسسة منارات الهدى</span>
+</div></footer>
+
+<div class="queue" id="queue" aria-label="قائمة الاستماع">
+  <div class="q-in">
+    <div class="q-b"><button id="qPrev" aria-label="السابق"><svg class="i" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button><button id="qNext" aria-label="التالي"><svg class="i" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button></div>
+    <div class="q-t" id="qTitle"></div>
+    <div class="q-b"><button id="qClose" aria-label="إغلاق"><svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+  </div>
+  <div class="q-frame" id="qFrame"></div>
+</div>
+
+<dialog id="shareDlg">
+  <canvas id="shareCv" width="1080" height="1350"></canvas>
+  <div class="prow">
+    <button class="btn pri" id="shareGo"><svg class="i" viewBox="0 0 24 24"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7M16 6l-4-4-4 4M12 2v13"/></svg><span data-i="shr">شارك الصورة</span></button>
+    <button class="btn" id="shareDl" data-i="dl">حفظ</button>
+    <button class="btn" id="shareX" data-i="cls">إغلاق</button>
+  </div>
+</dialog>
+<div class="toast" id="toast" role="status"></div>
+
+<script src="times.js"></script>
+<script src="qr-lib.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
