@@ -1,0 +1,683 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>صالح الجندي — Odoo Developer</title>
+<meta name="description" content="صالح الجندي، Odoo Developer: ببني Modules بـ Python و XML وبشرح Odoo 20 بالمصري على يوتيوب.">
+<meta property="og:title" content="صالح الجندي — Odoo Developer">
+<meta property="og:description" content="ببني Modules بـ Python و XML وبشرح Odoo 20 بالمصري على يوتيوب.">
+<meta property="og:image" content="avatar.jpg">
+<meta name="theme-color" content="#0d0a12">
+<link rel="icon" href="avatar.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Inter:wght@600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0d0a12;--bg2:#15101c;--card:rgba(255,255,255,.04);--card2:rgba(255,255,255,.07);
+  --ink:#f5eff4;--muted:#a99ca8;--dim:#6f6470;--line:rgba(255,255,255,.09);
+  --plum:#e6b9dc;--plum2:#5a2f55;--teal:#35c2b5;--red:#ff4d4d;
+  --ar:'IBM Plex Sans Arabic',system-ui,sans-serif;--mono:'JetBrains Mono',ui-monospace,monospace;--en:'Inter',system-ui,sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--ar);line-height:1.75;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.mono{font-family:var(--mono);direction:ltr;unicode-bidi:isolate}
+::selection{background:var(--teal);color:var(--bg)}
+
+/* background: grid + slow glow that follows scroll */
+#bg{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+#bg .grid{position:absolute;inset:-48px;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:48px 48px;opacity:.35;mask-image:radial-gradient(ellipse at 50% 40%,#000 15%,transparent 75%)}
+#bg .g1,#bg .g2{position:absolute;width:70vmax;height:70vmax;border-radius:50%;filter:blur(80px);opacity:.55;transition:transform 1.2s ease-out}
+#bg .g1{background:radial-gradient(circle,var(--plum2),transparent 65%);top:-35vmax;right:-25vmax}
+#bg .g2{background:radial-gradient(circle,#0c4a4f,transparent 65%);bottom:-40vmax;left:-25vmax}
+
+/* chapter dots */
+#dots{position:fixed;left:18px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:10px;z-index:5}
+#dots a{width:8px;height:8px;border-radius:50%;background:var(--dim);transition:.3s}
+#dots a.on{background:var(--teal);transform:scale(1.5);box-shadow:0 0 12px var(--teal)}
+
+.wrap{max-width:760px;margin:0 auto;padding:0 20px}
+section{padding:110px 0}
+.chap{font-family:var(--mono);font-size:12px;letter-spacing:.2em;color:var(--teal);text-transform:lowercase;direction:ltr;text-align:center;margin-bottom:10px}
+h2{font-size:clamp(26px,5vw,36px);font-weight:700;text-align:center;line-height:1.4}
+.lead{color:var(--muted);text-align:center;max-width:520px;margin:12px auto 44px}
+
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .8s ease,transform .8s ease}
+.reveal.in{opacity:1;transform:none}
+
+/* hero */
+#hero{min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:60px 20px}
+.term{width:min(420px,100%);background:rgba(20,14,26,.85);border:1px solid var(--line);border-radius:16px;padding:14px 18px 16px;text-align:left;direction:ltr;font-family:var(--mono);font-size:13.5px;box-shadow:0 20px 50px rgba(0,0,0,.4);margin-bottom:34px;min-height:126px}
+.term .bar{display:flex;gap:6px;margin-bottom:10px}.term .bar i{width:9px;height:9px;border-radius:50%;background:#e66b6b}.term .bar i:nth-child(2){background:#e8b860}.term .bar i:nth-child(3){background:#5cc98a}
+.term .p{color:var(--plum)}.term .out{color:var(--ink)}.term .ok{color:var(--teal)}
+.caret{display:inline-block;width:8px;height:15px;background:var(--teal);vertical-align:-2px;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.photo{width:150px;height:150px;border-radius:50%;padding:4px;background:conic-gradient(from 200deg,var(--plum),var(--teal),var(--plum));margin-bottom:22px}
+.photo img{width:100%;height:100%;border-radius:50%;object-fit:cover;display:block;border:4px solid var(--bg)}
+.name{font-family:var(--en);font-size:clamp(34px,8vw,52px);font-weight:800;line-height:1.2;letter-spacing:-.01em}
+.role{font-family:var(--en);font-weight:800;letter-spacing:.18em;font-size:14px;margin-top:8px;background:linear-gradient(135deg,var(--plum),var(--teal));-webkit-background-clip:text;background-clip:text;color:transparent}
+.tag{color:var(--muted);max-width:430px;margin:18px auto 30px}
+.btn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--card);padding:10px 22px;border-radius:40px;font-weight:600;transition:.25s}
+.btn:hover{border-color:var(--teal);color:var(--teal)}
+.down{animation:bob 1.8s ease-in-out infinite;display:inline-block}
+@keyframes bob{50%{transform:translateY(5px)}}
+
+/* timeline */
+.tl{position:relative;padding-right:28px}
+.tl::before{content:"";position:absolute;right:6px;top:8px;bottom:8px;width:2px;background:linear-gradient(var(--plum),var(--teal),transparent)}
+.tl .it{position:relative;margin-bottom:38px}
+.tl .it::before{content:"";position:absolute;right:-28px;top:9px;width:14px;height:14px;border-radius:50%;background:var(--bg);border:2px solid var(--plum)}
+.tl .it.od::before{border-color:var(--teal);background:var(--teal);box-shadow:0 0 14px var(--teal)}
+.tl .it.next::before{border-style:dashed;border-color:var(--dim)}
+.tl .yr{font-family:var(--mono);font-size:12.5px;color:var(--teal);direction:ltr;display:inline-block}
+.tl h3{font-size:19px;font-weight:700;margin:2px 0 4px}
+.tl p{color:var(--muted);font-size:15.5px}
+.tl .it.next h3,.tl .it.next p{color:var(--dim)}
+
+/* module builder */
+#build .wrap{max-width:1160px}
+.builder{background:rgba(20,14,26,.8);border:1px solid var(--line);border-radius:20px;overflow:hidden;box-shadow:0 30px 60px rgba(0,0,0,.35)}
+.steps{display:flex;border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none}
+.steps::-webkit-scrollbar{display:none}
+.steps button{flex:1 0 auto;min-width:96px;background:none;border:0;color:var(--muted);font:600 15px var(--en);padding:15px 10px;cursor:pointer;border-bottom:2px solid transparent;transition:.25s;white-space:nowrap}
+.steps button span{font-family:var(--mono);font-size:11.5px;color:var(--dim);display:block}
+.steps button.on{color:var(--ink);border-color:var(--teal);background:var(--card)}
+.steps button.done span{color:var(--teal)}
+.panes{display:grid;grid-template-columns:1.1fr 1fr}
+.code{direction:ltr;text-align:left;font-family:var(--mono);font-size:13.5px;line-height:1.7;padding:22px;white-space:pre;overflow:auto;border-left:1px solid var(--line);height:560px;color:#d8cfd7;font-variant-ligatures:none;font-feature-settings:"calt" 0,"liga" 0}
+.code .file{color:var(--dim);font-size:12px;display:block;margin:0 0 8px}
+.code .file+span,.code .gap{display:block;height:14px}
+.code .ln{display:block;min-height:1.7em}
+.code .new{background:rgba(53,194,181,.12);animation:flash 1.2s ease}
+@keyframes flash{from{background:rgba(53,194,181,.4)}}
+.kw{color:#d391c6}.fn{color:#7fd2ff}.st{color:#9fe3a8}.cm{color:var(--dim)}.tg{color:#f0a3a3}.at{color:#e8b860}.dc{color:#e8b860}
+.prev{padding:22px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.prev .lbl{font-size:12.5px;color:var(--dim);font-family:var(--mono);direction:ltr;text-align:left}
+.stepnav{display:flex;justify-content:space-between;gap:10px;padding:14px 22px;border-top:1px solid var(--line)}
+.stepnav button{background:var(--card);border:1px solid var(--line);color:var(--ink);border-radius:30px;padding:8px 18px;font:600 14px var(--ar);cursor:pointer}
+.stepnav button:hover{border-color:var(--teal);color:var(--teal)}
+.stepnav button:disabled{opacity:.3;cursor:default;border-color:var(--line);color:var(--ink)}
+.note{color:var(--muted);text-align:center;font-size:16px;margin-top:20px;min-height:52px}
+
+/* fake Odoo */
+.odoo{background:#f9f9fb;color:#212529;border-radius:10px;font-family:var(--en);direction:ltr;text-align:left;overflow:hidden;font-size:14px;height:476px;display:flex;flex-direction:column;position:relative}
+.odoo .nav{background:#71639e;color:#fff;padding:10px 14px;font-weight:600;font-size:13.5px;display:flex;gap:16px;align-items:center;flex:none}
+.odoo .nav .apps{opacity:.7;letter-spacing:-2px}
+.odoo .nav b{font-weight:700}
+.odoo .nav span.m{opacity:.75;font-weight:500}
+.odoo .cp{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid #e2e3e5;background:#fff;flex:none;min-height:50px}
+.odoo .crumb{font-size:15px;color:#495057;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.odoo .crumb a{color:#017e84;cursor:pointer}
+.odoo .ob{background:#714b67;color:#fff;border:0;border-radius:4px;padding:5px 12px;font:600 13px var(--en);cursor:pointer}
+.odoo .ob.sec{background:#e7e9ed;color:#374151}
+.odoo .ob:disabled{opacity:.45;cursor:not-allowed}
+.odoo .sw{display:flex;border:1px solid #d0d4d9;border-radius:4px;overflow:hidden}
+.odoo .sw button{border:0;background:#fff;padding:4px 10px;cursor:pointer;font:600 12px var(--en);color:#6c757d}
+.odoo .sw button.on{background:#e6f2f3;color:#017e84}
+.odoo .body{padding:18px;flex:1;overflow:auto;position:relative}
+.odoo .empty{color:#8a8f98;font-size:15px;text-align:center;padding-top:80px;font-family:var(--ar);direction:rtl}
+.odoo .sheet{background:#fff;border:1px solid #e2e3e5;border-radius:6px;padding:18px;animation:pop .4s ease}
+.odoo .h{font-size:22px;font-weight:700;margin-bottom:14px}
+.odoo .row{display:grid;grid-template-columns:118px 1fr;gap:10px;align-items:center;margin-bottom:10px}
+.odoo .row label{font-weight:600;color:#495057;font-size:13px}
+.odoo .row .v{border-bottom:1px solid #ced4da;padding:3px 0;min-height:26px;display:flex;align-items:center;gap:8px}
+.odoo .row .v.ro{border-color:transparent;color:#495057}
+.odoo .row.calc .v{color:#017e84;font-weight:700}
+.odoo .row.calc .v.bump{animation:bump .6s ease}
+@keyframes bump{30%{background:#d5f2ef;transform:scale(1.04)}}
+.odoo input{border:0;background:transparent;font:inherit;color:inherit;width:100%;outline:none;padding:0}
+.odoo input:focus{background:#f3fbfa}
+.odoo .stp{display:flex;align-items:center;gap:6px}
+.odoo .stp button{width:26px;height:26px;border-radius:4px;border:1px solid #ced4da;background:#fff;cursor:pointer;font:700 15px var(--en);color:#495057;line-height:1}
+.odoo .stp b{min-width:28px;text-align:center}
+.odoo .badge{display:inline-block;background:#e9f7f6;color:#017e84;border-radius:12px;padding:1px 10px;font-size:12px;font-weight:600}
+.odoo .badge.w{background:#fff3cd;color:#8a6d0b}.odoo .badge.g{background:#e7e9ed;color:#495057}
+.odoo table{width:100%;border-collapse:collapse;font-size:13px;background:#fff;animation:pop .4s ease}
+.odoo th{text-align:left;color:#6c757d;font-weight:600;padding:8px 10px;border-bottom:2px solid #dee2e6;white-space:nowrap}
+.odoo td{padding:9px 10px;border-bottom:1px solid #eceef0}
+.odoo tbody tr.click{cursor:pointer}
+.odoo tbody tr.click:hover{background:#f3fbfa}
+.odoo .dbt td:first-child{font-family:var(--mono);font-size:12.5px}
+.odoo .dbt td:last-child{color:#6c757d;font-family:var(--mono);font-size:12px}
+.odoo .dbt tr.magic td{color:#adb5bd}
+.odoo .dbt tr.fresh td{background:#e9f7f6;animation:pop .5s ease both}
+.odoo .dbh{font-family:var(--mono);font-size:12.5px;color:#6c757d;margin-bottom:8px;display:flex;justify-content:space-between}
+.odoo .status{display:flex;margin-left:auto}
+.odoo .status span{padding:4px 12px 4px 16px;background:#e7e9ed;color:#6c757d;font-size:12px;font-weight:600;clip-path:polygon(0 0,calc(100% - 8px) 0,100% 50%,calc(100% - 8px) 100%,0 100%,8px 50%);margin-left:-4px;transition:.3s}
+.odoo .status span.on{background:#017e84;color:#fff}
+.odoo .toast{position:absolute;right:14px;bottom:14px;background:#28a745;color:#fff;padding:8px 14px;border-radius:6px;font-size:13px;font-weight:600;animation:pop .3s ease;z-index:3}
+.odoo .dlg{position:absolute;inset:0;background:rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;z-index:4;animation:pop .25s ease}
+.odoo .dlg>div{background:#fff;border-radius:8px;width:min(330px,88%);box-shadow:0 20px 40px rgba(0,0,0,.25);overflow:hidden}
+.odoo .dlg h4{padding:12px 16px;border-bottom:1px solid #e2e3e5;font-size:15px}
+.odoo .dlg p{padding:14px 16px;font-size:14px;color:#495057}
+.odoo .dlg footer{padding:10px 16px;border-top:1px solid #e2e3e5;text-align:right;font:inherit;color:inherit}
+.odoo .ro-tag{font-size:11.5px;color:#8a6d0b;background:#fff3cd;padding:2px 8px;border-radius:4px;font-weight:600}
+.odoo .chips{display:flex;gap:6px;flex-wrap:wrap}
+@keyframes pop{from{opacity:0;transform:translateY(6px)}}
+.roles{display:flex;gap:8px;font-size:14px;font-family:var(--ar)}
+.roles button{flex:1;background:var(--card);border:1px solid var(--line);color:var(--muted);border-radius:10px;padding:9px 6px;cursor:pointer;font:inherit;line-height:1.3}
+.roles button small{display:block;font-family:var(--mono);font-size:11px;color:var(--dim)}
+.roles button.on{border-color:var(--teal);color:var(--teal)}
+.roles[hidden]{display:none}
+
+/* videos */
+.vids{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.vid{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;transition:.3s;display:flex;flex-direction:column}
+.vid:hover{border-color:var(--teal);transform:translateY(-4px)}
+.vid .th{aspect-ratio:16/9;background:#000 center/cover;position:relative}
+.vid .th::after{content:"";position:absolute;inset:auto auto 10px 10px;width:40px;height:28px;border-radius:8px;background:var(--red) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpath d='M3 2v6l5-3z' fill='white'/%3E%3C/svg%3E") center/14px no-repeat}
+.vid .tx{padding:14px 16px 16px}
+.vid h3{font-size:16px;font-weight:700;line-height:1.5}
+.vid p{color:var(--muted);font-size:13.5px;margin-top:4px}
+.series{margin-top:22px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px}
+.series h3{font-size:16px;margin-bottom:12px}
+.series h3 small{color:var(--muted);font-weight:400;font-size:13px}
+.eps{display:flex;flex-wrap:wrap;gap:8px}
+.eps span{font-size:13px;border:1px solid var(--line);border-radius:20px;padding:4px 12px;color:var(--muted)}
+.eps span b{font-family:var(--mono);color:var(--teal);font-weight:400;margin-inline-end:6px}
+
+/* tools */
+.tools{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.tools button{font:600 14px var(--en);background:var(--card);border:1px solid var(--line);color:var(--ink);padding:9px 18px;border-radius:30px;cursor:pointer;transition:.25s}
+.tools button:hover{border-color:var(--plum)}
+.tools button.on{background:var(--teal);border-color:var(--teal);color:var(--bg)}
+.toolbox{margin:24px auto 0;max-width:560px;min-height:92px;background:var(--card);border:1px dashed var(--line);border-radius:14px;padding:16px 20px;text-align:center;color:var(--muted);transition:.3s}
+.toolbox.on{border-style:solid;border-color:rgba(53,194,181,.4);color:var(--ink)}
+.toolbox b{color:var(--teal);font-family:var(--en)}
+
+/* end */
+.paths{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:28px}
+.path{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;cursor:pointer;text-align:right;color:var(--ink);font:inherit;transition:.25s}
+.path:hover,.path.on{border-color:var(--teal);background:var(--card2)}
+.path code{font-family:var(--mono);color:var(--teal);font-size:13px;display:block;direction:ltr;text-align:right}
+.path b{display:block;font-size:18px;margin-top:6px}
+.path small{color:var(--muted)}
+.answer{min-height:60px;text-align:center;color:var(--muted);margin-bottom:30px}
+.answer a{color:var(--teal);font-weight:600;border-bottom:1px solid}
+.links{display:flex;flex-direction:column;gap:10px}
+.lk{display:flex;align-items:center;gap:14px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;transition:.25s}
+.lk:hover{border-color:var(--teal);transform:translateX(-4px)}
+.lk .ic{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;flex:none}
+.lk .ic svg{width:22px;height:22px}
+.lk div b{display:block;font-size:16px}
+.lk div small{color:var(--muted);font-family:var(--mono);font-size:12.5px;direction:ltr;display:inline-block}
+.lk .ar{margin-right:auto;color:var(--dim)}
+footer{text-align:center;color:var(--dim);font-family:var(--mono);font-size:12px;padding:40px 0 60px;direction:ltr}
+
+@media (max-width:640px){
+  section{padding:80px 0}
+  #dots{display:none}
+  .panes{grid-template-columns:1fr}
+  .code{border-left:0;border-bottom:1px solid var(--line);height:auto;max-height:360px;font-size:11.5px;padding:16px}
+  .prev{padding:16px}.steps button{font-size:14px;padding:12px 6px;min-width:84px}.odoo{height:440px;font-size:13px}.odoo .h{font-size:19px}.odoo .row{grid-template-columns:92px 1fr}.odoo .body{padding:12px}.odoo .sheet{padding:14px}.stepnav{padding:12px 16px}
+  .vids,.paths{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<div id="bg"><div class="grid"></div><div class="g1"></div><div class="g2"></div></div>
+<nav id="dots" aria-label="الفصول"></nav>
+
+<!-- hero -->
+<header id="hero" data-ch>
+  <div class="term" aria-label="terminal">
+    <div class="bar"><i></i><i></i><i></i></div>
+    <div id="tty"></div>
+  </div>
+  <div class="photo reveal"><img src="avatar.jpg" alt="Saleh Elgendy"></div>
+  <h1 class="name reveal" dir="ltr">Saleh Elgendy</h1>
+  <div class="role reveal">ODOO DEVELOPER</div>
+  <p class="tag reveal">ببني Modules بـ Python و XML، وبشرح Odoo 20 بالمصري على يوتيوب. انزل وشوف أنا وصلت لفين.</p>
+  <a class="btn reveal" href="#story">ابدأ من الأول <span class="down">↓</span></a>
+</header>
+
+<!-- 01 -->
+<section id="story" data-ch>
+  <div class="wrap">
+    <div class="chap reveal">chapter 01</div>
+    <h2 class="reveal">من فين بدأت</h2>
+    <p class="lead reveal">من الكمبيوتر ساينس، للمونتاج، لـ Odoo.</p>
+    <div class="tl">
+      <div class="it reveal"><span class="yr">2018 — 2022</span><h3>بكالوريوس Computer Science</h3><p>كلية الحاسبات ونظم المعلومات، جامعة 6 أكتوبر.</p></div>
+      <div class="it reveal"><span class="yr">2019 — now</span><h3>مونتاج الفيديو</h3><p>بدأت مونتير فيديو إسلامي من 2019. من هنا اتعلمت إزاي أشرح فكرة واحدة في فيديو قصير، وده اللي بستخدمه دلوقتي في شرح Odoo.</p></div>
+      <div class="it od reveal"><span class="yr">Nov 2024 — Jan 2025</span><h3>Odoo من ناحية البيزنس</h3><p>كورس Odoo Functional Consultant في Kamah Tech، 3 مستويات: المبيعات والمخازن والتصنيع، وإزاي الشركة بتشتغل جوه Odoo.</p></div>
+      <div class="it od reveal"><span class="yr">2025</span><h3>Odoo Development</h3><p>بعد ما فهمت البيزنس، دخلت في الكود: Python و XML و ORM و views و security.</p></div>
+      <div class="it od reveal"><span class="yr">Jan 2026</span><h3>قناة يوتيوب بتشرح Odoo بالمصري</h3><p>سلسلة أساسيات Odoo 20، وفيديو عن اللي اتغير للمطورين في الإصدار ده من المصادر الرسمية، بدوبلاج إنجليزي.</p></div>
+      <div class="it next reveal"><span class="yr">next</span><h3>أول Module للبورتفوليو على GitHub</h3><p>بشتغل عليه دلوقتي.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 02 -->
+<section id="build" data-ch>
+  <div class="wrap">
+    <div class="chap reveal">chapter 02</div>
+    <h2 class="reveal">إزاي بيتبني Module في Odoo</h2>
+    <p class="lead reveal">8 خطوات من موديول مكتبة حقيقي على Odoo 20. في كل خطوة، جرّب بنفسك في الشاشة اللي جنب الكود.</p>
+    <div class="builder reveal">
+      <div class="steps" id="steps" role="tablist"></div>
+      <div class="panes">
+        <div class="code" id="code"></div>
+        <div class="prev">
+          <div class="lbl" id="plbl">preview · Odoo 20</div>
+          <div class="odoo" id="odoo"></div>
+          <div class="roles" id="roles" hidden>
+            <button data-r="guest">مستخدم عادي<small>no group</small></button>
+            <button data-r="user">Librarian<small>r</small></button>
+            <button data-r="manager" class="on">Manager<small>crud</small></button>
+          </div>
+        </div>
+      </div>
+      <div class="stepnav"><button id="prevS">→ اللي قبلها</button><button id="nextS">الخطوة الجاية ←</button></div>
+    </div>
+    <p class="note" id="snote"></p>
+  </div>
+</section>
+
+<!-- 03 -->
+<section id="videos" data-ch>
+  <div class="wrap">
+    <div class="chap reveal">chapter 03 · youtube</div>
+    <h2 class="reveal">بشرح اللي بتعلمه</h2>
+    <p class="lead reveal">كل فيديو فكرة واحدة، بكود حقيقي، والمصطلحات بالإنجليزي زي ما هتقابلها في الشغل.</p>
+    <div class="vids">
+      <a class="vid reveal" href="https://www.youtube.com/watch?v=ip9fWY6MhIY" target="_blank" rel="noopener">
+        <div class="th" style="background-image:url('https://i.ytimg.com/vi/ip9fWY6MhIY/hqdefault.jpg')"></div>
+        <div class="tx"><h3>إيه اللي اتغير في كود Odoo 20 للمطورين</h3><p>من المصادر الرسمية · بدوبلاج إنجليزي وترجمات</p></div>
+      </a>
+      <a class="vid reveal" href="https://www.youtube.com/watch?v=TZ6IAisL-oY" target="_blank" rel="noopener">
+        <div class="th" style="background-image:url('https://i.ytimg.com/vi/TZ6IAisL-oY/hqdefault.jpg')"></div>
+        <div class="tx"><h3>5 أخطاء وإنت بتشغّل Odoo 20 على Windows</h3><p>المشكلة، وسببها، وحلها</p></div>
+      </a>
+    </div>
+    <div class="series reveal">
+      <h3>سلسلة أساسيات Odoo 20 <small>· 10 ريلز</small></h3>
+      <div class="eps">
+        <span><b>01</b>أول Module</span><span><b>02</b>self</span><span><b>03</b>Fields</span><span><b>04</b>Relations</span><span><b>05</b>ORM</span>
+        <span><b>06</b>Computed fields</span><span><b>07</b>onchange vs constrains</span><span><b>08</b>Views · Actions · Menus</span><span><b>09</b>Inheritance</span><span><b>10</b>Security</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 -->
+<section id="tools" data-ch>
+  <div class="wrap">
+    <div class="chap reveal">chapter 04</div>
+    <h2 class="reveal">أدواتي</h2>
+    <p class="lead reveal">دوس على أي أداة.</p>
+    <div class="tools reveal" id="toolbtns"></div>
+    <div class="toolbox reveal" id="toolbox">اختار أداة، وأقولك بستخدمها في إيه.</div>
+  </div>
+</section>
+
+<!-- 05 -->
+<section id="end" data-ch>
+  <div class="wrap">
+    <div class="chap reveal">chapter 05</div>
+    <h2 class="reveal">وصلت للآخر. وإنت؟</h2>
+    <p class="lead reveal">اختار اللي يناسبك.</p>
+    <div class="paths reveal">
+      <button class="path" data-p="hire"><code>&lt;hire/&gt;</code><b>بتدوّر على Odoo Developer</b><small>لفريقك</small></button>
+      <button class="path" data-p="learn"><code>&lt;learn/&gt;</code><b>عايز تتعلم Odoo</b><small>من الصفر وبالمصري</small></button>
+    </div>
+    <p class="answer reveal" id="answer"></p>
+    <div class="links reveal">
+      <a class="lk" href="https://www.linkedin.com/in/salehelgendy" target="_blank" rel="noopener">
+        <span class="ic" style="background:#0a66c2"><svg viewBox="0 0 24 24" fill="#fff"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9.75h4v11H3zM9.5 9.75h3.8v1.5h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.65 4.78 6.1v5.45h-4v-4.83c0-1.15-.02-2.63-1.6-2.63-1.6 0-1.85 1.25-1.85 2.55v4.91h-4z"/></svg></span>
+        <div><b>LinkedIn</b><small>linkedin.com/in/salehelgendy</small></div><span class="ar">←</span>
+      </a>
+      <a class="lk" href="https://www.youtube.com/@Saleh_Elgendy" target="_blank" rel="noopener">
+        <span class="ic" style="background:var(--red)"><svg viewBox="0 0 24 24" fill="#fff"><path d="M9.5 7.5v9l7.5-4.5z"/></svg></span>
+        <div><b>YouTube</b><small>@Saleh_Elgendy</small></div><span class="ar">←</span>
+      </a>
+    </div>
+  </div>
+</section>
+<footer>giza, egypt — 2026</footer>
+
+<script>
+/* terminal typing */
+(function(){
+  const lines=[["$ ","whoami"],["out","Saleh Elgendy"],["$ ","status"],["ok","● open to work · Odoo Developer"]];
+  const el=document.getElementById('tty');let i=0;
+  function next(){
+    if(i>=lines.length){el.insertAdjacentHTML('beforeend','<div><span class="p">$ </span><span class="caret"></span></div>');return}
+    const [k,t]=lines[i++];const row=document.createElement('div');el.appendChild(row);
+    if(k==='$ '){row.innerHTML='<span class="p">$ </span><span></span>';const s=row.lastChild;let j=0;
+      (function type(){s.textContent=t.slice(0,++j);j<t.length?setTimeout(type,55):setTimeout(next,250)})()}
+    else{row.className=k;row.textContent=t;setTimeout(next,350)}
+  }
+  setTimeout(next,400);
+})();
+
+/* reveal + chapter dots */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.15});
+document.querySelectorAll('.reveal').forEach(e=>io.observe(e));
+const chs=[...document.querySelectorAll('[data-ch]')],dots=document.getElementById('dots');
+chs.forEach(c=>{const a=document.createElement('a');a.href='#'+c.id;a.setAttribute('aria-label',c.id);dots.appendChild(a)});
+const dio=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){const i=chs.indexOf(e.target);[...dots.children].forEach((d,k)=>d.classList.toggle('on',k===i))}}),{rootMargin:'-45% 0px -45% 0px'});
+chs.forEach(c=>dio.observe(c));
+const g1=document.querySelector('#bg .g1'),g2=document.querySelector('#bg .g2');
+addEventListener('scroll',()=>{const p=scrollY/(document.body.scrollHeight-innerHeight||1);g1.style.transform=`translate(${-p*30}vw,${p*40}vh)`;g2.style.transform=`translate(${p*30}vw,${-p*30}vh)`},{passive:true});
+
+/* module builder: 8 steps, code on one side, a fake Odoo that reacts on the other */
+(function(){
+const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+function hlXml(l){let o='',re=/(<!--.*?-->)|("[^"]*")|(<\/?[\w.:-]+|\/?>)|([\w:-]+)(?==)/g,i=0,m;while((m=re.exec(l))){o+=esc(l.slice(i,m.index));o+=m[1]?`<span class="cm">${esc(m[1])}</span>`:m[2]?`<span class="st">${esc(m[2])}</span>`:m[3]?`<span class="tg">${esc(m[3])}</span>`:`<span class="at">${esc(m[4])}</span>`;i=re.lastIndex}return o+esc(l.slice(i))}
+function hlCsv(l,first){if(first)return `<span class="cm">${esc(l)}</span>`;const p=l.split(',');return p.map((x,i)=>i===4?`<span class="st">${esc(x)}</span>`:i===5&&x?`<span class="at">${esc(x)}</span>`:esc(x)).join(',')}
+function hlPySafe(l){let o='',re=/(#.*$)|("(?:[^"\\]|\\.)*")|(@[\w.]+)|\b(from|import|class|def|for|in|if|return|raise|and|or|not|True|False|lambda|self)\b|\b(\w+)(?=\()/g,i=0,m;while((m=re.exec(l))){o+=esc(l.slice(i,m.index));o+=m[1]?`<span class="cm">${esc(m[1])}</span>`:m[2]?`<span class="st">${esc(m[2])}</span>`:m[3]?`<span class="dc">${esc(m[3])}</span>`:m[4]?`<span class="kw">${m[4]}</span>`:`<span class="fn">${m[5]}</span>`;i=re.lastIndex}return o+esc(l.slice(i))}
+function block(f,lang,src){
+  const L=src.replace(/^\n/,'').split('\n');
+  return `<span class="file">${f}</span>`+L.map((raw,i)=>{const n=raw.startsWith('+');const t=n?raw.slice(1):raw;
+    const h=lang==='py'?hlPySafe(t):lang==='xml'?hlXml(t):hlCsv(t,i===0);
+    return `<span class="ln${n?' new':''}">${h||' '}</span>`}).join('');
+}
+
+const S=[
+{tab:'Model',note:'الـ Model بيعمل جدول في PostgreSQL. وحتى من غير ولا field، Odoo بيضيف الأعمدة الأساسية لوحده: الـ id، ومين عمل الريكورد، وإمتى.',
+ code:[['__manifest__.py','py',`
++{
++    "name": "Library",
++    "version": "1.0",
++    "depends": ["base", "mail"],
++    "application": True,
++}`],['models/library_book.py','py',`
+from odoo import models
+
+
+class LibraryBook(models.Model):
++    _name = "library.book"
++    _description = "Library Book"
++    _order = "name"`]]},
+{tab:'Fields',note:'كل field بقى عمود في الجدول. والـ Many2one بيتخزن رقم id بيشاور على جدول تاني.',
+ code:[['models/library_book.py','py',`
+from odoo import fields, models
+
+
+class LibraryBook(models.Model):
+    _name = "library.book"
+    _description = "Library Book"
+    _order = "name"
+
++    name = fields.Char(string="Title", required=True)
++    author_id = fields.Many2one("library.author", string="Author")
++    isbn = fields.Char(string="ISBN")
++    pages = fields.Integer()
++    copies = fields.Integer(default=1)
++    language = fields.Selection(
++        [("ar", "Arabic"), ("en", "English")],
++        default="ar",
++    )`]]},
+{tab:'Views',note:'الـ views بتقول لـ Odoo يعرض الداتا إزاي. بدّل بين List و Form. بس لسه مفيش Menu، فالمستخدم مش هيعرف يوصل هنا.',
+ code:[['views/library_book_views.xml','xml',`
+<record id="library_book_view_list" model="ir.ui.view">
+  <field name="model">library.book</field>
+  <field name="arch" type="xml">
++    <list>
++      <field name="name"/>
++      <field name="author_id"/>
++      <field name="language" widget="badge"/>
++      <field name="copies"/>
++    </list>
+  </field>
+</record>
+
+<record id="library_book_view_form" model="ir.ui.view">
+  <field name="model">library.book</field>
+  <field name="arch" type="xml">
++    <form><sheet>
++      <div class="oe_title">
++        <h1><field name="name"/></h1>
++      </div>
++      <group>
++        <field name="author_id"/>
++        <field name="isbn"/>
++        <field name="language" widget="radio"/>
++        <field name="pages"/>
++        <field name="copies"/>
++      </group>
++    </sheet></form>
+  </field>
+</record>`]]},
+{tab:'Menu',note:'الـ Action بيفتح الـ views، والـ Menu بيوصّل للـ Action. دلوقتي Library ظهر فوق. دوس على أي كتاب.',
+ code:[['views/library_book_views.xml','xml',`
++<record id="library_book_action" model="ir.actions.act_window">
++  <field name="name">Books</field>
++  <field name="res_model">library.book</field>
++  <field name="view_mode">list,form</field>
++</record>`],['views/library_menus.xml','xml',`
++<menuitem id="library_menu_root" name="Library"/>
++<menuitem id="library_menu_catalog" name="Catalog"
++          parent="library_menu_root"/>
++<menuitem id="library_book_menu" name="Books"
++          parent="library_menu_catalog"
++          action="library_book_action"/>`]]},
+{tab:'Compute',note:'available_copies مش بيتكتب بالإيد. Odoo بيحسبه لوحده كل ما copies أو حالة الاستعارة تتغير. زوّد النسخ أو قللها وشوف.',
+ code:[['models/library_book.py','py',`
+from odoo import api, fields, models
+
+
+class LibraryBook(models.Model):
+    _name = "library.book"
+    # ... previous fields
+
++    loan_ids = fields.One2many("library.loan", "book_id")
++    available_copies = fields.Integer(
++        compute="_compute_available_copies", store=True)
++
++    @api.depends("copies", "loan_ids.state")
++    def _compute_available_copies(self):
++        for book in self:
++            ongoing = book.loan_ids.filtered(
++                lambda loan: loan.state == "ongoing")
++            book.available_copies = book.copies - len(ongoing)`]]},
+{tab:'Constraints',note:'اكتب ISBN مش 13 رقم، أو خلي النسخ بالسالب، ودوس Save. الـ ISBN بيمسكه Python، والنسخ السالبة بيمسكها PostgreSQL نفسه.',
+ code:[['models/library_book.py','py',`
+from odoo import api, fields, models
+from odoo.exceptions import ValidationError
+
+
+class LibraryBook(models.Model):
+    _name = "library.book"
+    # ...
+
++    _copies_positive = models.Constraint(
++        "CHECK(copies >= 0)",
++        "Copies cannot be negative.",
++    )
++
++    @api.constrains("isbn")
++    def _check_isbn(self):
++        for book in self:
++            if book.isbn and (len(book.isbn) != 13
++                              or not book.isbn.isdigit()):
++                raise ValidationError(
++                    "ISBN must be exactly 13 digits.")`]]},
+{tab:'Buttons',note:'الزرار بينادي function في Python، والـ statusbar بيتحرك. ولو مفيش نسخ متاحة، Odoo بيرفض. جرّب ترجع لـ Compute، وتخلي النسخ 1، وبعدين تيجي هنا.',
+ code:[['models/library_loan.py','py',`
+from odoo import fields, models
+from odoo.exceptions import UserError
+
+
+class LibraryLoan(models.Model):
+    _name = "library.loan"
+    _description = "Book Loan"
+
+    book_id = fields.Many2one("library.book", required=True)
+    member_id = fields.Many2one("res.partner", required=True)
+    return_date = fields.Date()
+    state = fields.Selection([
+        ("draft", "Draft"),
+        ("ongoing", "Ongoing"),
+        ("returned", "Returned"),
+    ], default="draft")
+
++    def action_confirm(self):
++        for loan in self:
++            if loan.book_id.available_copies < 1:
++                raise UserError("No copies are available.")
++            loan.state = "ongoing"
++
++    def action_return(self):
++        self.write({
++            "state": "returned",
++            "return_date": fields.Date.context_today(self),
++        })`],['views/library_loan_views.xml','xml',`
+<form>
++  <header>
++    <button name="action_confirm" type="object" string="Confirm"
++            class="btn-primary" invisible="state != 'draft'"/>
++    <button name="action_return" type="object" string="Return Book"
++            class="btn-primary" invisible="state != 'ongoing'"/>
++    <field name="state" widget="statusbar"/>
++  </header>
+  <sheet>...</sheet>
+</form>`]]},
+{tab:'Security',note:'في Odoo 20 الصلاحيات في ir.access.csv. حرف r معناه قراءة بس، و crud معناه كل حاجة. والـ Menu نفسه مقفول على الـ group. غيّر المستخدم تحت.',
+ code:[['security/ir.access.csv','csv',`
++id,name,model_id,group_id/id,operation,domain
++access_book_librarian,book: librarian read,library.book,group_library_user,r,
++access_book_manager,book: manager all,library.book,group_library_manager,crud,
++access_loan_librarian,loan: librarian create and read,library.loan,group_library_user,cr,
++access_loan_librarian_own,loan: librarian updates own,library.loan,group_library_user,u,"[('librarian_id', '=', user.id)]"`],['views/library_menus.xml','xml',`
+<menuitem id="library_menu_root" name="Library"
++          groups="group_library_user"/>`]]}
+];
+
+/* state of the fake Odoo */
+const B={title:'Clean Code',author:'Robert C. Martin',isbn:'9780132350884',lang:'English',pages:464,copies:3};
+const BOOKS=[['Clean Code','Robert C. Martin','English',3],['The Pragmatic Programmer','David Thomas','English',2],['مقدمة ابن خلدون','ابن خلدون','Arabic',1]];
+let cur=0,v2='form',opened=false,role='manager',loan='draft',dlg=null,toast=null,draft=null,bump=false;
+const OLD_LOANS=1;
+const avail=()=>B.copies-OLD_LOANS-(loan==='ongoing'?1:0);
+const $=id=>document.getElementById(id);
+
+function nav(){
+  if(cur<3||(cur===7&&role==='guest'))return '<div class="nav"><span class="apps">▦</span><b>Odoo</b><span class="m">Discuss</span></div>';
+  return '<div class="nav"><span class="apps">▦</span><b>Library</b><span class="m">Catalog</span>'+(cur>=6?'<span class="m">Loans</span>':'')+'</div>';
+}
+function row(l,v,cls=''){return `<div class="row ${cls}"><label>${l}</label><div class="v ${cls.includes('calc')?'':''}">${v}</div></div>`}
+function bookForm(mode){ /* mode: static | compute | edit | ro */
+  let h=`<div class="sheet"><div class="h">${B.title}</div>`;
+  h+=row('Author',B.author);
+  if(mode==='edit'){
+    h+=row('ISBN',`<input id="fIsbn" value="${draft.isbn}" maxlength="20" inputmode="numeric">`);
+    h+=row('Language',B.lang);h+=row('Pages',B.pages);
+    h+=row('Copies',`<input id="fCopies" type="number" value="${draft.copies}" style="width:80px">`);
+  }else{
+    h+=row('ISBN',B.isbn);h+=row('Language',B.lang);h+=row('Pages',B.pages);
+    h+=mode==='compute'?row('Copies','<div class="stp"><button data-a="dec">−</button><b>'+B.copies+'</b><button data-a="inc">+</button></div>'):row('Copies',B.copies);
+  }
+  if(mode==='compute'||mode==='edit'||mode==='ro'){
+    h+=`<div class="row calc"><label>Available</label><div class="v${bump?' bump':''}">${avail()}</div></div>`;
+    h+=row('Loans','<div class="chips"><span class="badge w">LOAN/0001 · Ongoing</span>'+(loan==='ongoing'?'<span class="badge w">LOAN/0002 · Ongoing</span>':'')+'</div>');
+  }
+  return h+'</div>';
+}
+function list(click){
+  return '<table><thead><tr><th>Title</th><th>Author</th><th>Language</th><th>Copies</th></tr></thead><tbody>'+
+   BOOKS.map((b,i)=>`<tr class="${click?'click':''}" data-a="${click?'open':''}"><td>${i?b[0]:B.title}</td><td>${b[1]}</td><td><span class="badge">${b[2]}</span></td><td>${i?b[3]:B.copies}</td></tr>`).join('')+'</tbody></table>';
+}
+function dbTable(withFields){
+  const magic=[['id','serial'],['create_uid','int4 → res_users'],['create_date','timestamp'],['write_uid','int4 → res_users'],['write_date','timestamp']];
+  const f=[['name','varchar NOT NULL'],['author_id','int4 → library_author'],['isbn','varchar'],['pages','int4'],['copies','int4'],['language','varchar']];
+  let rows=magic.slice(0,1).map(c=>`<tr class="magic"><td>${c[0]}</td><td>${c[1]}</td></tr>`).join('');
+  if(withFields)rows+=f.map((c,i)=>`<tr class="fresh" style="animation-delay:${i*.12}s"><td>${c[0]}</td><td>${c[1]}</td></tr>`).join('');
+  rows+=magic.slice(1).map(c=>`<tr class="magic"><td>${c[0]}</td><td>${c[1]}</td></tr>`).join('');
+  return `<div class="dbh"><span>table: library_book</span><span>${withFields?11:5} columns</span></div><table class="dbt"><thead><tr><th>column</th><th>type</th></tr></thead><tbody>${rows}</tbody></table>`;
+}
+function render(){
+  const o=$('odoo');let cp='',body='';
+  $('plbl').textContent=cur<2?'preview · PostgreSQL':'preview · Odoo 20';
+  if(cur<2){
+    o.innerHTML=`<div class="cp"><div class="crumb" style="font-family:var(--mono);font-size:13px">odoo=# \\d library_book</div></div><div class="body">${dbTable(cur===1)}</div>`;
+    return;
+  }
+  if(cur===2){
+    cp=`<div class="crumb">library.book</div><div class="sw"><button data-a="vlist" class="${v2==='list'?'on':''}">List</button><button data-a="vform" class="${v2==='form'?'on':''}">Form</button></div>`;
+    body=v2==='list'?list(false):bookForm('static');
+  }else if(cur===3){
+    cp=opened?`<div class="crumb"><a data-a="back">Books</a> / ${B.title}</div>`:`<button class="ob">New</button><div class="crumb">Books</div>`;
+    body=opened?bookForm('static'):list(true);
+  }else if(cur===4){
+    cp=`<div class="crumb"><a>Books</a> / ${B.title}</div>`;body=bookForm('compute');
+  }else if(cur===5){
+    if(!draft)draft={isbn:B.isbn,copies:B.copies};
+    cp=`<div class="crumb"><a>Books</a> / ${B.title}</div><button class="ob" data-a="save">Save</button><button class="ob sec" data-a="discard">Discard</button>`;body=bookForm('edit');
+  }else if(cur===6){
+    const st=['draft','ongoing','returned'];
+    const btn=loan==='draft'?'<button class="ob" data-a="confirm">Confirm</button>':loan==='ongoing'?'<button class="ob" data-a="ret">Return Book</button>':'<button class="ob sec" data-a="again">↺ New loan</button>';
+    cp=`${btn}<div class="status">${st.map(s=>`<span class="${s===loan?'on':''}">${s[0].toUpperCase()+s.slice(1)}</span>`).join('')}</div>`;
+    body=`<div class="sheet"><div class="h">LOAN/0002</div>${row('Book',B.title)}<div class="row calc"><label>Available</label><div class="v${bump?' bump':''}">${avail()}</div></div>${row('Member','Ahmed Ali')}${row('Loan Date','2026-11-09')}${loan==='returned'?row('Return Date','2026-11-09'):''}</div>`;
+  }else{
+    if(role==='guest'){cp='<div class="crumb">Discuss</div>';body='<div class="empty">تطبيق Library مش ظاهر خالص<br>لأن الـ Menu مقفول على group_library_user</div>'}
+    else if(role==='user'){cp=`<div class="crumb"><a>Books</a> / ${B.title}</div><span class="ro-tag">Read only</span>`;body=bookForm('ro')}
+    else{cp=`<div class="crumb"><a>Books</a> / ${B.title}</div><button class="ob">New</button><button class="ob sec">Delete</button>`;body=bookForm('static')}
+  }
+  o.innerHTML=nav()+`<div class="cp">${cp}</div><div class="body">${body}</div>`+
+    (dlg?`<div class="dlg"><div><h4>${dlg[0]}</h4><p>${dlg[1]}</p><footer><button class="ob" data-a="ok">Ok</button></footer></div></div>`:'')+
+    (toast?`<div class="toast">${toast}</div>`:'');
+  bump=false;
+  if(cur===5){$('fIsbn').oninput=e=>draft.isbn=e.target.value;$('fCopies').oninput=e=>draft.copies=e.target.value===''?0:+e.target.value}
+}
+let tt;function flash(t){toast=t;clearTimeout(tt);tt=setTimeout(()=>{toast=null;const x=document.querySelector('#odoo .toast');x&&x.remove()},1800)}
+$('odoo').addEventListener('click',e=>{
+  const a=e.target.closest('[data-a]');if(!a)return;const k=a.dataset.a;
+  if(k==='vlist'||k==='vform')v2=k==='vlist'?'list':'form';
+  else if(k==='open')opened=true; else if(k==='back')opened=false;
+  else if(k==='inc'){B.copies++;bump=true} else if(k==='dec'){if(B.copies>0){B.copies--;bump=true}}
+  else if(k==='save'){
+    if(draft.copies<0)dlg=['Validation Error','The operation cannot be completed: Copies cannot be negative.'];
+    else if(draft.isbn&&(draft.isbn.length!==13||!/^\d+$/.test(draft.isbn)))dlg=['Validation Error','ISBN must be exactly 13 digits.'];
+    else{B.isbn=draft.isbn;B.copies=draft.copies;bump=true;flash('Saved ✓')}
+  }
+  else if(k==='discard'){draft={isbn:B.isbn,copies:B.copies}}
+  else if(k==='ok')dlg=null;
+  else if(k==='confirm'){if(avail()<1)dlg=['User Error','No copies are available.'];else{loan='ongoing';bump=true;flash('Loan confirmed')}}
+  else if(k==='ret'){loan='returned';bump=true;flash('Book returned')}
+  else if(k==='again'){loan='draft';bump=true}
+  else return;
+  render();
+});
+document.querySelectorAll('#roles button').forEach(b=>b.onclick=()=>{role=b.dataset.r;document.querySelectorAll('#roles button').forEach(x=>x.classList.toggle('on',x===b));render()});
+
+const tabs=$('steps');
+S.forEach((s,i)=>{const b=document.createElement('button');b.innerHTML=`<span>${String(i+1).padStart(2,'0')}</span>${s.tab}`;b.onclick=()=>go(i);tabs.appendChild(b)});
+function go(i){
+  cur=i;dlg=null;toast=null;draft=null;opened=false;
+  [...tabs.children].forEach((b,k)=>{b.classList.toggle('on',k===i);b.classList.toggle('done',k<i)});
+  const t=tabs.children[i];tabs.scrollTo({left:t.offsetLeft-tabs.clientWidth/2+t.clientWidth/2,behavior:'smooth'});
+  $('code').innerHTML=S[i].code.map(c=>block(c[0],c[1],c[2])).join('<span class="gap"></span>');$('code').scrollTop=0;
+  $('snote').textContent=S[i].note;$('roles').hidden=i!==7;
+  $('prevS').disabled=i===0;$('nextS').disabled=i===S.length-1;
+  render();
+}
+$('prevS').onclick=()=>go(Math.max(0,cur-1));$('nextS').onclick=()=>go(Math.min(S.length-1,cur+1));
+go(0);
+})();
+
+/* tools */
+const T={
+ 'Python':'بكتب بيه الـ models والـ business logic: computed fields و constraints و overrides بـ <b>super()</b>.',
+ 'XML':'الـ views (form · list · search · kanban) والـ actions والـ menus، والـ inheritance بـ <b>xpath</b>.',
+ 'Odoo ORM':'<b>search · create · write · browse</b> بدل ما أكتب SQL بإيدي، وفاهم إن <b>self</b> ممكن يبقى أكتر من record.',
+ 'PostgreSQL':'الداتابيز اللي Odoo شغال عليها. بفتحها عشان أفهم الجداول والـ relations من جوه.',
+ 'QWeb':'الـ reports والـ templates في Odoo.',
+ 'Git':'بتابع بيه الكود بتاعي، والـ modules هتتنشر على GitHub.',
+ 'VS Code':'بشغّل Odoo 20 من السورس على Windows وبعمل <b>debug</b> بالـ breakpoints.',
+ 'Premiere Pro':'من أيام المونتاج، ودلوقتي بعمل بيه فيديوهات شرح Odoo على القناة.'
+};
+const tb=document.getElementById('toolbtns'),box=document.getElementById('toolbox');
+Object.keys(T).forEach(k=>{const b=document.createElement('button');b.textContent=k;b.onclick=()=>{tb.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));box.innerHTML='<b>'+k+'</b> — '+T[k];box.classList.add('on')};tb.appendChild(b)});
+
+/* end paths */
+const A={hire:'كلّمني على <a href="https://www.linkedin.com/in/salehelgendy" target="_blank" rel="noopener">LinkedIn</a>، ولو حابب تشوف مستوايا قبلها، الفيديوهات فوق فيها كود حقيقي.',
+ learn:'ابدأ بـ <a href="https://www.youtube.com/@Saleh_Elgendy" target="_blank" rel="noopener">سلسلة أساسيات Odoo 20</a> على القناة، من أول Module لحد الـ Security.'};
+document.querySelectorAll('.path').forEach(p=>p.onclick=()=>{document.querySelectorAll('.path').forEach(x=>x.classList.toggle('on',x===p));document.getElementById('answer').innerHTML=A[p.dataset.p]});
+</script>
+</body>
+</html>
